@@ -1,5 +1,7 @@
-out/
-node_modules/
 .vscode-test/
 *.vsix
 .env
+src/
+.gitignore
+tsconfig.json
+vsc-extension-quickstart.md
