@@ -1,0 +1,115 @@
+{
+  "name": "ai-commit-generator",
+  "displayName": "AI Commit Message Generator",
+  "description": "Generate detailed, clear commit messages using AI with multi-provider fallback",
+  "version": "1.0.0",
+  "publisher": "solveraid",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "SCM Providers",
+    "Other"
+  ],
+  "keywords": [
+    "git",
+    "commit",
+    "ai",
+    "groq",
+    "gemini",
+    "llama",
+    "conventional-commits"
+  ],
+
+  "main": "./out/extension.js",
+  "contributes": {
+    "menus": {
+      "scm/title": [
+        {
+          "command": "aiCommit.generate",
+          "group": "navigation",
+          "when": "scmProvider == git"
+        }
+      ]
+    },
+    "commands": [
+      {
+        "command": "aiCommit.generate",
+        "title": "AI: Generate Commit Message",
+        "icon": "$(sparkle)"
+      }
+    ],
+    "keybindings": [
+      {
+        "command": "aiCommit.generate",
+        "key": "ctrl+shift+g ctrl+shift+m",
+        "mac": "cmd+shift+g cmd+shift+m"
+      }
+    ],
+    "configuration": {
+      "title": "AI Commit Generator",
+      "properties": {
+        "aiCommit.groqApiKey": {
+          "type": "string",
+          "default": "",
+          "description": "Groq API Key (Primary provider - LLaMA 3.3 70B)"
+        },
+        "aiCommit.openrouterApiKey": {
+          "type": "string",
+          "default": "",
+          "description": "OpenRouter API Key (Fallback 1)"
+        },
+        "aiCommit.geminiApiKey": {
+          "type": "string",
+          "default": "",
+          "description": "Google Gemini API Key (Fallback 2)"
+        },
+        "aiCommit.mistralApiKey": {
+          "type": "string",
+          "default": "",
+          "description": "Mistral AI API Key (Fallback 3)"
+        },
+        "aiCommit.cohereApiKey": {
+          "type": "string",
+          "default": "",
+          "description": "Cohere API Key (Fallback 4)"
+        },
+        "aiCommit.preferredProvider": {
+          "type": "string",
+          "enum": ["auto", "random", "groq", "openrouter", "gemini", "mistral", "cohere"],
+          "default": "auto",
+          "description": "Preferred AI provider (auto = priority order, random = shuffle available)"
+        },
+        "aiCommit.commitStyle": {
+          "type": "string",
+          "enum": ["conventional", "detailed", "simple"],
+          "default": "conventional",
+          "description": "Commit message style"
+        },
+        "aiCommit.language": {
+          "type": "string",
+          "enum": ["english", "indonesian"],
+          "default": "english",
+          "description": "Language for commit messages"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "lint": "eslint src --ext ts"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "@types/vscode": "^1.85.0",
+    "@typescript-eslint/eslint-plugin": "^6.13.0",
+    "@typescript-eslint/parser": "^6.13.0",
+    "eslint": "^8.54.0",
+    "typescript": "^5.3.0"
+  },
+  "dependencies": {
+    "axios": "^1.6.0"
+  }
+}
