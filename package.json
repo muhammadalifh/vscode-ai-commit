@@ -208,7 +208,8 @@
     "compile": "tsc -p ./",
     "watch": "tsc -watch -p ./",
     "lint": "eslint src --ext ts",
-    "test": "npm run compile && node ./out/test/runTest.js"
+    "test": "npm run compile && node ./out/test/runTest.js",
+    "release": "bumpp --commit --push --tag"
   },
   "devDependencies": {
     "@types/chai": "^5.2.3",
@@ -218,6 +219,7 @@
     "@typescript-eslint/eslint-plugin": "^6.13.0",
     "@typescript-eslint/parser": "^6.13.0",
     "@vscode/test-electron": "^2.5.2",
+    "bumpp": "^10.4.0",
     "chai": "^6.2.2",
     "eslint": "^8.54.0",
     "glob": "^13.0.0",
