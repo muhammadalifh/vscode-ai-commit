@@ -1,72 +1,86 @@
-# 🤖 AI Commit Message Generator
+# 🤖 AI Commit Generator (Multi-Provider)
 
-Generate detailed, clear commit messages using AI with multi-provider fallback.
+> **Stop wasting time writing commit messages.** Let AI analyze your code changes and generate clear, detailed, and professional commit messages in seconds.
 
 ![VSCode Extension](https://img.shields.io/badge/vscode-extension-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
+![Version](https://img.shields.io/badge/version-1.1.0-brightgreen)
 
-## ✨ Features
+---
 
-- 🔄 **4 AI Providers** with automatic fallback (Groq → OpenRouter → Mistral → Cohere)
-- 📝 **Conventional Commits** format support
-- 🌐 **Multi-language** support (English & Indonesian)
-- 🎯 **Smart Detection** of tech stack and change context
-- ⚡ **One-click** commit message generation
-- 📋 **Multiple Output Options** (clipboard, SCM input box, or edit inline)
+## 🤔 Why This Extension?
 
-## 🚀 Quick Start
+**The Problem:**
+Writing good commit messages is tedious. Developers often resort to vague messages like "fix bug" or "update code" because crafting a proper description takes time and mental effort—especially after a long coding session.
 
-### 1. Install the Extension
+**The Solution:**
+This extension uses **AI** to read your actual code changes (`git diff`) and generate a **meaningful, descriptive commit message** that follows best practices. No more guessing, no more "WIP" commits.
 
-```bash
-# From the vscode-ai-commit directory
-npm install
-npm run compile
-```
+---
 
-Then press `F5` to open Extension Development Host.
+## 🎯 Who Is This For?
 
-### 2. Configure API Keys
+- **Solo developers** who want cleaner git history without the effort.
+- **Teams** that enforce commit message standards (like Conventional Commits).
+- **Beginners** learning how to write proper commit messages.
+- **Anyone** who values productivity over repetitive tasks.
 
-Open VSCode Settings (`Ctrl+,`) and search for "AI Commit". Set at least one API key:
+---
 
-| Provider | Setting | Free Tier |
-|----------|---------|-----------|
-| **Groq** | `aiCommit.groqApiKey` | 30 RPM |
-| **OpenRouter** | `aiCommit.openrouterApiKey` | Free credits |
-| **Mistral** | `aiCommit.mistralApiKey` | ~2000/day |
-| **Cohere** | `aiCommit.cohereApiKey` | 1000/month |
+## ✨ What Does It Do?
 
-Or set environment variables:
-```bash
-GROQ_API_KEY=your_key
-OPENROUTER_API_KEY=your_key
-# ... etc
-```
+| Feature | Description |
+|---------|-------------|
+| 🔄 **Multi-Provider AI** | Uses 4 free AI providers (Groq, OpenRouter, Mistral, Cohere) with automatic fallback if one fails. |
+| 📝 **Conventional Commits** | Generates messages in `feat:`, `fix:`, `docs:` format automatically. |
+| 🌐 **Multi-Language** | Supports English and Indonesian output. |
+| 🎯 **Smart Context** | Detects your tech stack (React, Python, etc.) to give relevant descriptions. |
+| ⚡ **One-Click Operation** | Press a button or use a shortcut—done in 2 seconds. |
+| 📋 **Flexible Output** | Copy to clipboard, auto-fill SCM input, or edit before using. |
 
-### 3. Generate Commit Message
+---
 
-1. Stage your changes with `git add`
-2. Open Command Palette (`Ctrl+Shift+P`)
-3. Run "**AI: Generate Commit Message**"
-4. Choose what to do with the generated message:
-   - **Copy to Clipboard** - paste it yourself
-   - **Use in SCM Input** - auto-fill the Source Control input box
-   - **Edit...** - modify before using
+## 🚀 How To Use
 
-**Keyboard Shortcut:** `Ctrl+Shift+G Ctrl+Shift+M`
+### Step 1: Install
+Search **"AI Commit Generator"** in VSCode Extensions and click **Install**.
 
-## ⚙️ Configuration
+### Step 2: Get a FREE API Key
+You need at least one API key (all are **FREE**):
 
-| Setting | Type | Default | Description |
-|---------|------|---------|-------------|
-| `aiCommit.preferredProvider` | enum | `auto` | Preferred provider or auto-fallback |
-| `aiCommit.commitStyle` | enum | `conventional` | `conventional`, `detailed`, or `simple` |
-| `aiCommit.language` | enum | `english` | `english` or `indonesian` |
+| Provider | Get Key | Free Limit |
+|----------|---------|------------|
+| **Groq** (Recommended) | [console.groq.com](https://console.groq.com) | 30 requests/min |
+| **OpenRouter** | [openrouter.ai](https://openrouter.ai) | Free credits |
+| **Mistral** | [console.mistral.ai](https://console.mistral.ai) | ~2000/day |
+| **Cohere** | [dashboard.cohere.com](https://dashboard.cohere.com) | 1000/month |
 
-### Commit Styles
+### Step 3: Configure
+1. Open VSCode Settings (`Ctrl + ,`)
+2. Search **"AI Commit"**
+3. Paste your API key in the appropriate field
 
-**Conventional (recommended):**
+### Step 4: Generate!
+1. Make some code changes
+2. Stage your files (`git add .`)
+3. Click the **✨ sparkle icon** in Source Control panel
+   - Or press `Ctrl+Shift+G` then `Ctrl+Shift+M`
+   - Or open Command Palette → "AI: Generate Commit Message"
+4. Done! Your commit message is ready.
+
+---
+
+## ⚙️ Configuration Options
+
+| Setting | Options | Default |
+|---------|---------|---------|
+| **Preferred Provider** | `auto`, `groq`, `openrouter`, `mistral`, `cohere` | `auto` |
+| **Commit Style** | `conventional`, `detailed`, `simple` | `conventional` |
+| **Language** | `english`, `indonesian` | `english` |
+
+### Commit Style Examples
+
+**Conventional (Recommended):**
 ```
 feat(auth): implement OAuth2 login flow
 
@@ -87,53 +101,45 @@ session management and user model updates for external providers.
 Add OAuth2 login with Google provider
 ```
 
-## 📁 Project Structure
+---
 
-```
-vscode-ai-commit/
-├── src/
-│   ├── extension.ts        # Entry point
-│   ├── config.ts           # Configuration management
-│   ├── providers/
-│   │   ├── base.ts         # Provider interface
-│   │   ├── groq.ts         # Groq LLaMA provider
-│   │   ├── openrouter.ts   # OpenRouter
-│   │   ├── mistral.ts      # Mistral AI
-│   │   ├── cohere.ts       # Cohere Command-R+
-│   │   └── index.ts        # Fallback orchestrator
-│   └── services/
-│       ├── git.ts          # Git operations
-│       └── prompt.ts       # Prompt builder
-├── package.json
-└── README.md
-```
+## 🔒 Privacy & Security
 
-## 🛠️ Development
+- ✅ **Your API keys are stored locally** on your machine.
+- ✅ **Code diffs are sent directly** to the AI provider you choose.
+- ✅ **The extension developer has NO access** to your keys or code.
+- ✅ **Open source** — inspect the code yourself on [GitHub](https://github.com/muhammadalifh/vscode-ai-commit).
+
+---
+
+## 🛠️ For Developers
+
+Want to contribute or run locally?
 
 ```bash
-# Install dependencies
+git clone https://github.com/muhammadalifh/vscode-ai-commit.git
+cd vscode-ai-commit
 npm install
-
-# Compile TypeScript
 npm run compile
-
-# Watch mode
-npm run watch
-
-# Run in Extension Development Host
-F5
+# Press F5 to launch Extension Development Host
 ```
+
+See [CONTRIBUTING.md](./CONTRIBUTING.md) for contribution guidelines.
+
+---
 
 ## 📝 License
 
-MIT License - see [LICENSE](./LICENSE)
+MIT License — use it freely, even commercially.
+
+---
 
 ## 🙏 Credits
 
 Built with ❤️ by [Muhammad Alif H](https://github.com/muhammadalifh)
 
-AI Providers:
-- [Groq](https://groq.com) - LLaMA 3.3 70B
-- [OpenRouter](https://openrouter.ai) - Arcee Trinity Large
-- [Mistral AI](https://mistral.ai) - Mistral Large
-- [Cohere](https://cohere.com) - Command-R+
+**Powered by:**
+- [Groq](https://groq.com) — LLaMA 3.3 70B
+- [OpenRouter](https://openrouter.ai) — Arcee Trinity Large
+- [Mistral AI](https://mistral.ai) — Codestral
+- [Cohere](https://cohere.com) — Command R+
