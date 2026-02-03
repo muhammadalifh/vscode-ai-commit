@@ -1,8 +1,9 @@
 {
-  "name": "ai-commit-generator",
-  "displayName": "AI Commit Message Generator",
+  "name": "vscode-ai-commit-gen",
+  "displayName": "AI Commit Generator (Multi-Provider)",
   "description": "Generate detailed, clear commit messages using AI with multi-provider fallback",
   "version": "1.1.0",
+  "icon": "icon.png",
   "publisher": "muhammadalifh",
   "engines": {
     "vscode": "^1.85.0"
