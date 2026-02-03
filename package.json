@@ -2,8 +2,8 @@
   "name": "ai-commit-generator",
   "displayName": "AI Commit Message Generator",
   "description": "Generate detailed, clear commit messages using AI with multi-provider fallback",
-  "version": "1.0.0",
-  "publisher": "solveraid",
+  "version": "1.1.0",
+  "publisher": "muhammadalifh",
   "engines": {
     "vscode": "^1.85.0"
   },
@@ -16,11 +16,11 @@
     "commit",
     "ai",
     "groq",
-    "gemini",
+    "openrouter",
     "llama",
-    "conventional-commits"
+    "conventional-commits",
+    "commit-message"
   ],
-
   "main": "./out/extension.js",
   "contributes": {
     "menus": {
@@ -46,67 +46,178 @@
         "mac": "cmd+shift+g cmd+shift+m"
       }
     ],
-    "configuration": {
-      "title": "AI Commit Generator",
-      "properties": {
-        "aiCommit.groqApiKey": {
-          "type": "string",
-          "default": "",
-          "description": "Groq API Key (Primary provider - LLaMA 3.3 70B)"
-        },
-        "aiCommit.openrouterApiKey": {
-          "type": "string",
-          "default": "",
-          "description": "OpenRouter API Key (Fallback 1)"
-        },
-        "aiCommit.geminiApiKey": {
-          "type": "string",
-          "default": "",
-          "description": "Google Gemini API Key (Fallback 2)"
-        },
-        "aiCommit.mistralApiKey": {
-          "type": "string",
-          "default": "",
-          "description": "Mistral AI API Key (Fallback 3)"
-        },
-        "aiCommit.cohereApiKey": {
-          "type": "string",
-          "default": "",
-          "description": "Cohere API Key (Fallback 4)"
-        },
-        "aiCommit.preferredProvider": {
-          "type": "string",
-          "enum": ["auto", "random", "groq", "openrouter", "gemini", "mistral", "cohere"],
-          "default": "auto",
-          "description": "Preferred AI provider (auto = priority order, random = shuffle available)"
-        },
-        "aiCommit.commitStyle": {
-          "type": "string",
-          "enum": ["conventional", "detailed", "simple"],
-          "default": "conventional",
-          "description": "Commit message style"
-        },
-        "aiCommit.language": {
-          "type": "string",
-          "enum": ["english", "indonesian"],
-          "default": "english",
-          "description": "Language for commit messages"
+    "configuration": [
+      {
+        "title": "AI Commit Generator",
+        "properties": {
+          "aiCommit.preferredProvider": {
+            "type": "string",
+            "enum": [
+              "auto",
+              "random",
+              "groq",
+              "openrouter",
+              "mistral",
+              "cohere"
+            ],
+            "enumDescriptions": [
+              "Auto: Use providers in priority order (Groq → OpenRouter → Mistral → Cohere)",
+              "Random: Shuffle available providers randomly",
+              "Groq: Use Groq as primary provider",
+              "OpenRouter: Use OpenRouter as primary provider",
+              "Mistral: Use Mistral AI as primary provider",
+              "Cohere: Use Cohere as primary provider"
+            ],
+            "default": "auto",
+            "markdownDescription": "**Preferred AI Provider**\n\nSelect which AI provider to use first. Others will be used as fallback if the preferred one fails.",
+            "order": 1
+          },
+          "aiCommit.commitStyle": {
+            "type": "string",
+            "enum": [
+              "conventional",
+              "detailed",
+              "simple"
+            ],
+            "enumDescriptions": [
+              "Conventional Commits format (feat:, fix:, docs:, etc.)",
+              "Detailed multi-line commit with body explanation",
+              "Simple one-line commit message"
+            ],
+            "default": "conventional",
+            "markdownDescription": "**Commit Message Style**\n\nChoose the format for generated commit messages.",
+            "order": 2
+          },
+          "aiCommit.language": {
+            "type": "string",
+            "enum": [
+              "english",
+              "indonesian"
+            ],
+            "default": "english",
+            "markdownDescription": "**Language**\n\nLanguage for generated commit messages.",
+            "order": 3
+          }
+        }
+      },
+      {
+        "title": "AI Commit Generator: Providers",
+        "properties": {
+          "aiCommit.groqApiKey": {
+            "type": "string",
+            "default": "",
+            "markdownDescription": "**Groq API Key** _(Primary Provider - Fastest)_\n\n🔑 Get your FREE key at [console.groq.com](https://console.groq.com)\n\n🔒 **Privacy:** Your API key is stored locally and sent directly to Groq's servers. The extension developer has NO access to your keys or data.",
+            "order": 10
+          },
+          "aiCommit.groqModel": {
+            "type": "string",
+            "enum": [
+              "llama-3.3-70b-versatile",
+              "llama-3.1-70b-versatile",
+              "llama-3.1-8b-instant",
+              "gemma2-9b-it",
+              "mixtral-8x7b-32768"
+            ],
+            "enumDescriptions": [
+              "LLaMA 3.3 70B - Best quality (recommended)",
+              "LLaMA 3.1 70B - High quality",
+              "LLaMA 3.1 8B - Fastest response",
+              "Gemma 2 9B - Google's open model",
+              "Mixtral 8x7B - Good for code"
+            ],
+            "default": "llama-3.3-70b-versatile",
+            "markdownDescription": "**Groq Model**\n\n✅ All Groq models are **FREE** with generous rate limits.",
+            "order": 11
+          },
+          "aiCommit.openrouterApiKey": {
+            "type": "string",
+            "default": "",
+            "markdownDescription": "**OpenRouter API Key** _(Fallback 1)_\n\n🔑 Get your FREE key at [openrouter.ai](https://openrouter.ai)\n\n🔒 **Privacy:** Your API key is stored locally and sent directly to OpenRouter's servers. The extension developer has NO access to your keys or data.",
+            "order": 20
+          },
+          "aiCommit.openrouterModel": {
+            "type": "string",
+            "enum": [
+              "arcee-ai/trinity-large-preview:free"
+            ],
+            "enumDescriptions": [
+              "Arcee Trinity Large - FREE (Recommended)"
+            ],
+            "default": "arcee-ai/trinity-large-preview:free",
+            "markdownDescription": "**OpenRouter Model**\n\n✅ Only showing verified **FREE** models.",
+            "order": 21
+          },
+          "aiCommit.mistralApiKey": {
+            "type": "string",
+            "default": "",
+            "markdownDescription": "**Mistral AI API Key** _(Fallback 2)_\n\n🔑 Get your FREE key at [console.mistral.ai](https://console.mistral.ai)\n\n🔒 **Privacy:** Your API key is stored locally and sent directly to Mistral's servers. The extension developer has NO access to your keys or data.",
+            "order": 30
+          },
+          "aiCommit.mistralModel": {
+            "type": "string",
+            "enum": [
+              "codestral-latest",
+              "mistral-small-latest",
+              "open-mistral-7b",
+              "mistral-large-latest"
+            ],
+            "enumDescriptions": [
+              "Codestral - Best for code (recommended, FREE)",
+              "Mistral Small - Balanced (FREE tier)",
+              "Open Mistral 7B - Fast & free",
+              "Mistral Large - Highest quality (PAID)"
+            ],
+            "default": "codestral-latest",
+            "markdownDescription": "**Mistral Model**\n\n✅ `codestral-latest` is **FREE** for code tasks.",
+            "order": 31
+          },
+          "aiCommit.cohereApiKey": {
+            "type": "string",
+            "default": "",
+            "markdownDescription": "**Cohere API Key** _(Fallback 3)_\n\n🔑 Get your FREE key at [dashboard.cohere.com](https://dashboard.cohere.com)\n\n🔒 **Privacy:** Your API key is stored locally and sent directly to Cohere's servers. The extension developer has NO access to your keys or data.",
+            "order": 40
+          },
+          "aiCommit.cohereModel": {
+            "type": "string",
+            "enum": [
+              "command-r-plus-08-2024",
+              "command-r-08-2024",
+              "command-light",
+              "command"
+            ],
+            "enumDescriptions": [
+              "Command R+ (Aug 2024) - Best quality (recommended)",
+              "Command R (Aug 2024) - Good quality, faster",
+              "Command Light - Fastest, basic tasks",
+              "Command - Standard model"
+            ],
+            "default": "command-r-plus-08-2024",
+            "markdownDescription": "**Cohere Model**\n\n✅ FREE tier: **1000 API calls/month**.",
+            "order": 41
+          }
         }
       }
-    }
+    ]
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",
     "compile": "tsc -p ./",
     "watch": "tsc -watch -p ./",
-    "lint": "eslint src --ext ts"
+    "lint": "eslint src --ext ts",
+    "test": "npm run compile && node ./out/test/runTest.js"
   },
   "devDependencies": {
+    "@types/chai": "^5.2.3",
+    "@types/mocha": "^10.0.10",
     "@types/node": "^20.10.0",
     "@types/vscode": "^1.85.0",
     "@typescript-eslint/eslint-plugin": "^6.13.0",
     "@typescript-eslint/parser": "^6.13.0",
+    "@vscode/test-electron": "^2.5.2",
+    "chai": "^6.2.2",
     "eslint": "^8.54.0",
+    "glob": "^13.0.0",
+    "mocha": "^11.7.5",
     "typescript": "^5.3.0"
   },
   "dependencies": {

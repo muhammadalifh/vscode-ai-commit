@@ -9,12 +9,10 @@ import { getConfig } from '../config';
 export class GeminiProvider implements AIProvider {
   readonly name = 'Google Gemini Flash';
   readonly id = ProviderType.GEMINI;
-  
-  private readonly MODEL = 'gemini-2.0-flash';
-  
-  private getApiUrl(): string {
+
+  private getApiUrl(model: string): string {
     const apiKey = getConfig().geminiApiKey;
-    return `https://generativelanguage.googleapis.com/v1beta/models/${this.MODEL}:generateContent?key=${apiKey}`;
+    return `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
   }
   
   isAvailable(): boolean {
@@ -22,14 +20,15 @@ export class GeminiProvider implements AIProvider {
   }
   
   async call(systemPrompt: string, userPrompt: string): Promise<string> {
-    const apiKey = getConfig().geminiApiKey;
+    const config = getConfig();
+    const apiKey = config.geminiApiKey;
     
     if (!apiKey) {
       throw new Error('Gemini API key not configured');
     }
     
     const response = await axios.post(
-      this.getApiUrl(),
+      this.getApiUrl(config.geminiModel),
       {
         contents: [
           {

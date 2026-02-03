@@ -14,7 +14,7 @@ import { getConfig } from '../config';
 const providers = new Map<ProviderType, AIProvider>();
 providers.set(ProviderType.GROQ, new GroqProvider());
 providers.set(ProviderType.OPENROUTER, new OpenRouterProvider());
-providers.set(ProviderType.GEMINI, new GeminiProvider());
+
 providers.set(ProviderType.MISTRAL, new MistralProvider());
 providers.set(ProviderType.COHERE, new CohereProvider());
 
@@ -22,7 +22,6 @@ providers.set(ProviderType.COHERE, new CohereProvider());
 const FALLBACK_ORDER: ProviderType[] = [
   ProviderType.GROQ,
   ProviderType.OPENROUTER,
-  ProviderType.GEMINI,
   ProviderType.MISTRAL,
   ProviderType.COHERE
 ];

@@ -7,18 +7,20 @@ import { AIProvider, ProviderType } from './base';
 import { getConfig } from '../config';
 
 export class MistralProvider implements AIProvider {
-  readonly name = 'Mistral Large';
+  get name(): string {
+    return `Mistral (${getConfig().mistralModel})`;
+  }
   readonly id = ProviderType.MISTRAL;
   
   private readonly API_URL = 'https://api.mistral.ai/v1/chat/completions';
-  private readonly MODEL = 'mistral-large-latest';
   
   isAvailable(): boolean {
     return !!getConfig().mistralApiKey;
   }
   
   async call(systemPrompt: string, userPrompt: string): Promise<string> {
-    const apiKey = getConfig().mistralApiKey;
+    const config = getConfig();
+    const apiKey = config.mistralApiKey;
     
     if (!apiKey) {
       throw new Error('Mistral API key not configured');
@@ -27,7 +29,7 @@ export class MistralProvider implements AIProvider {
     const response = await axios.post(
       this.API_URL,
       {
-        model: this.MODEL,
+        model: config.mistralModel,
         messages: [
           { role: 'system', content: systemPrompt },
           { role: 'user', content: userPrompt }

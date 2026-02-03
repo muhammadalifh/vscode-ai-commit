@@ -2,3 +2,5 @@ node_modules/
 out/
 *.vsix
 .env
+.vscode-test
+.vscode

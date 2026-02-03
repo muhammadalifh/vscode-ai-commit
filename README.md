@@ -7,7 +7,7 @@ Generate detailed, clear commit messages using AI with multi-provider fallback.
 
 ## ✨ Features
 
-- 🔄 **5 AI Providers** with automatic fallback (Groq → OpenRouter → Gemini → Mistral → Cohere)
+- 🔄 **4 AI Providers** with automatic fallback (Groq → OpenRouter → Mistral → Cohere)
 - 📝 **Conventional Commits** format support
 - 🌐 **Multi-language** support (English & Indonesian)
 - 🎯 **Smart Detection** of tech stack and change context
@@ -34,14 +34,13 @@ Open VSCode Settings (`Ctrl+,`) and search for "AI Commit". Set at least one API
 |----------|---------|-----------|
 | **Groq** | `aiCommit.groqApiKey` | 30 RPM |
 | **OpenRouter** | `aiCommit.openrouterApiKey` | Free credits |
-| **Gemini** | `aiCommit.geminiApiKey` | 15 RPM |
 | **Mistral** | `aiCommit.mistralApiKey` | ~2000/day |
 | **Cohere** | `aiCommit.cohereApiKey` | 1000/month |
 
 Or set environment variables:
 ```bash
 GROQ_API_KEY=your_key
-GEMINI_API_KEY=your_key
+OPENROUTER_API_KEY=your_key
 # ... etc
 ```
 
@@ -98,7 +97,6 @@ vscode-ai-commit/
 │   ├── providers/
 │   │   ├── base.ts         # Provider interface
 │   │   ├── groq.ts         # Groq LLaMA provider
-│   │   ├── gemini.ts       # Google Gemini
 │   │   ├── openrouter.ts   # OpenRouter
 │   │   ├── mistral.ts      # Mistral AI
 │   │   ├── cohere.ts       # Cohere Command-R+
@@ -132,11 +130,10 @@ MIT License - see [LICENSE](./LICENSE)
 
 ## 🙏 Credits
 
-Built with ❤️ by [SolverAID](https://gitlab.com/solveraid)
+Built with ❤️ by [Muhammad Alif H](https://github.com/muhammadalifh)
 
 AI Providers:
 - [Groq](https://groq.com) - LLaMA 3.3 70B
-- [OpenRouter](https://openrouter.ai) - Multi-model routing
-- [Google AI](https://ai.google.dev) - Gemini Flash
+- [OpenRouter](https://openrouter.ai) - Arcee Trinity Large
 - [Mistral AI](https://mistral.ai) - Mistral Large
 - [Cohere](https://cohere.com) - Command-R+

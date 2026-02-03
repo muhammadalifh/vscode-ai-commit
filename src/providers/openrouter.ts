@@ -7,18 +7,20 @@ import { AIProvider, ProviderType } from './base';
 import { getConfig } from '../config';
 
 export class OpenRouterProvider implements AIProvider {
-  readonly name = 'OpenRouter LLaMA 3.1 70B';
+  get name(): string {
+    return `OpenRouter (${getConfig().openrouterModel})`;
+  }
   readonly id = ProviderType.OPENROUTER;
   
   private readonly API_URL = 'https://openrouter.ai/api/v1/chat/completions';
-  private readonly MODEL = 'meta-llama/llama-3.1-70b-instruct:free';
   
   isAvailable(): boolean {
     return !!getConfig().openrouterApiKey;
   }
   
   async call(systemPrompt: string, userPrompt: string): Promise<string> {
-    const apiKey = getConfig().openrouterApiKey;
+    const config = getConfig();
+    const apiKey = config.openrouterApiKey;
     
     if (!apiKey) {
       throw new Error('OpenRouter API key not configured');
@@ -27,7 +29,7 @@ export class OpenRouterProvider implements AIProvider {
     const response = await axios.post(
       this.API_URL,
       {
-        model: this.MODEL,
+        model: config.openrouterModel,
         messages: [
           { role: 'system', content: systemPrompt },
           { role: 'user', content: userPrompt }
@@ -39,13 +41,20 @@ export class OpenRouterProvider implements AIProvider {
         headers: {
           'Authorization': `Bearer ${apiKey}`,
           'Content-Type': 'application/json',
-          'HTTP-Referer': 'https://github.com/solveraid/ai-commit-generator',
+          'HTTP-Referer': 'https://github.com/muhammadalifh/vscode-ai-commit',
           'X-Title': 'AI Commit Generator'
         },
         timeout: 30000
       }
     );
     
-    return response.data.choices[0].message.content;
+    const content = response.data.choices?.[0]?.message?.content;
+    
+    if (!content) {
+      console.error('OpenRouter response error:', JSON.stringify(response.data));
+      throw new Error('OpenRouter returned empty content. Try a different model or check your API key.');
+    }
+    
+    return content;
   }
 }

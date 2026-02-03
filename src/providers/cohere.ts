@@ -7,18 +7,20 @@ import { AIProvider, ProviderType } from './base';
 import { getConfig } from '../config';
 
 export class CohereProvider implements AIProvider {
-  readonly name = 'Cohere Command-R+';
+  get name(): string {
+    return `Cohere (${getConfig().cohereModel})`;
+  }
   readonly id = ProviderType.COHERE;
   
-  private readonly API_URL = 'https://api.cohere.ai/v1/chat';
-  private readonly MODEL = 'command-r-plus';
+  private readonly API_URL = 'https://api.cohere.ai/v2/chat';
   
   isAvailable(): boolean {
     return !!getConfig().cohereApiKey;
   }
   
   async call(systemPrompt: string, userPrompt: string): Promise<string> {
-    const apiKey = getConfig().cohereApiKey;
+    const config = getConfig();
+    const apiKey = config.cohereApiKey;
     
     if (!apiKey) {
       throw new Error('Cohere API key not configured');
@@ -27,11 +29,12 @@ export class CohereProvider implements AIProvider {
     const response = await axios.post(
       this.API_URL,
       {
-        model: this.MODEL,
-        message: userPrompt,
-        preamble: systemPrompt,
-        temperature: 0.3,
-        max_tokens: 1000
+        model: config.cohereModel,
+        messages: [
+            { role: 'system', content: systemPrompt },
+            { role: 'user', content: userPrompt }
+        ],
+        temperature: 0.2
       },
       {
         headers: {
@@ -42,6 +45,6 @@ export class CohereProvider implements AIProvider {
       }
     );
     
-    return response.data.text;
+    return response.data.message.content[0].text;
   }
 }
