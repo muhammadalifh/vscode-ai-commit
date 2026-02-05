@@ -230,7 +230,7 @@ See [CONTRIBUTING.md](./CONTRIBUTING.md) for guidelines.
 
 ## 🔄 Changelog
 
-See [CHANGELOG.md](./changelog.md) for version history.
+See [CHANGELOG.md](./CHANGELOG.md) for version history.
 
 ---
 
@@ -238,7 +238,7 @@ See [CHANGELOG.md](./changelog.md) for version history.
 
 MIT License — use it freely, even commercially.
 
-See [LICENSE](./LICENSE.txt) for full text.
+See [LICENSE](./LICENSE) for full text.
 
 ---
 
