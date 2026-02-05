@@ -2,7 +2,7 @@
   "name": "vscode-ai-commit-gen",
   "displayName": "AI Commit Generator (Multi-Provider)",
   "description": "Generate detailed, clear commit messages using AI with multi-provider fallback",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "icon": "icon.png",
   "publisher": "muhammadalifh",
   "engines": {
