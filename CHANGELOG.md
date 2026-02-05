@@ -2,6 +2,16 @@
 
 All notable changes to the "AI Commit Message Generator" extension will be documented in this file.
 
+## [1.2.1] - 2026-02-05
+
+### 🔄 Changed
+- 📝 Minor documentation updates (README & CHANGELOG)
+- 📦 Bumped version to 1.2.1 for package consistency
+
+**Full Changelog**: https://github.com/muhammadalifh/vscode-ai-commit/compare/v1.2.0...v1.2.1
+
+---
+
 ## [1.2.0] - 2026-02-05
 
 ### ✨ Added
