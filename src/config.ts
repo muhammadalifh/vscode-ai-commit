@@ -30,7 +30,7 @@ export function getConfig(): Config {
     groqApiKey: (config.get<string>('groqApiKey') || process.env.GROQ_API_KEY || '').trim(),
     groqModel: config.get<string>('groqModel') || 'llama-3.3-70b-versatile',
     openrouterApiKey: (config.get<string>('openrouterApiKey') || process.env.OPENROUTER_API_KEY || '').trim(),
-    openrouterModel: config.get<string>('openrouterModel') || 'stepfun/step-3.5-flash:free',
+    openrouterModel: config.get<string>('openrouterModel') || 'arcee-ai/trinity-large-preview:free',
     geminiApiKey: (config.get<string>('geminiApiKey') || process.env.GEMINI_API_KEY || '').trim(),
     geminiModel: config.get<string>('geminiModel') || 'gemini-1.5-flash',
     mistralApiKey: (config.get<string>('mistralApiKey') || process.env.MISTRAL_API_KEY || '').trim(),

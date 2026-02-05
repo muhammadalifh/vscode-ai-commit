@@ -2,6 +2,21 @@
 
 All notable changes to the "AI Commit Message Generator" extension will be documented in this file.
 
+## [1.2.0] - 2026-02-05
+
+### Added
+- **OpenRouter**: Added `arcee-ai/trinity-mini-preview:free` model (Fast Free option, 2.8s latency)
+- **Mistral**: Added `ministral-8b-latest` (Lightweight, 91.5 tok/s) and `open-mistral-nemo` (Open Source, 78.6 tok/s)
+- **Cohere**: Added `command-r7b-12-2024` (Efficient, 88.8 tok/s - fastest Cohere model)
+
+### Changed
+- Updated model descriptions with performance metrics from benchmark results
+- Fixed default OpenRouter model in config to match package.json
+
+### Removed
+- **Mistral**: Removed deprecated `open-mistral-7b`
+- **Cohere**: Removed deprecated `command-light` and `command` models
+
 ## [1.1.0] - 2026-02-03
 
 ### Changed

@@ -2,7 +2,7 @@
   "name": "vscode-ai-commit-gen",
   "displayName": "AI Commit Generator (Multi-Provider)",
   "description": "Generate detailed, clear commit messages using AI with multi-provider fallback",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "icon": "icon.png",
   "publisher": "muhammadalifh",
   "engines": {
@@ -143,10 +143,12 @@
           "aiCommit.openrouterModel": {
             "type": "string",
             "enum": [
-              "arcee-ai/trinity-large-preview:free"
+              "arcee-ai/trinity-large-preview:free",
+              "arcee-ai/trinity-mini-preview:free"
             ],
             "enumDescriptions": [
-              "Arcee Trinity Large - FREE (Recommended)"
+              "Arcee Trinity Large - Best Free (detailed responses)",
+              "Arcee Trinity Mini - Fast Free (2.8s latency)"
             ],
             "default": "arcee-ai/trinity-large-preview:free",
             "markdownDescription": "**OpenRouter Model**\n\n✅ Only showing verified **FREE** models.",
@@ -163,13 +165,15 @@
             "enum": [
               "codestral-latest",
               "mistral-small-latest",
-              "open-mistral-7b",
+              "ministral-8b-latest",
+              "open-mistral-nemo",
               "mistral-large-latest"
             ],
             "enumDescriptions": [
               "Codestral - Best for code (recommended, FREE)",
-              "Mistral Small - Balanced (FREE tier)",
-              "Open Mistral 7B - Fast & free",
+              "Mistral Small - Fast (78 tok/s)",
+              "Ministral 8B - Lightweight (91.5 tok/s)",
+              "Mistral Nemo - Open Source (78.6 tok/s)",
               "Mistral Large - Highest quality (PAID)"
             ],
             "default": "codestral-latest",
@@ -187,14 +191,12 @@
             "enum": [
               "command-r-plus-08-2024",
               "command-r-08-2024",
-              "command-light",
-              "command"
+              "command-r7b-12-2024"
             ],
             "enumDescriptions": [
-              "Command R+ (Aug 2024) - Best quality (recommended)",
-              "Command R (Aug 2024) - Good quality, faster",
-              "Command Light - Fastest, basic tasks",
-              "Command - Standard model"
+              "Command R+ - Best quality (53.6 tok/s)",
+              "Command R - Balanced (59.9 tok/s)",
+              "Command R 7B - Efficient (88.8 tok/s, fastest)"
             ],
             "default": "command-r-plus-08-2024",
             "markdownDescription": "**Cohere Model**\n\n✅ FREE tier: **1000 API calls/month**.",
