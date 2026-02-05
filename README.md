@@ -264,7 +264,6 @@ Built with ❤️ by [Muhammad Alif H](https://github.com/muhammadalifh)
 - 🐛 **Bug Reports:** [GitHub Issues](https://github.com/muhammadalifh/vscode-ai-commit/issues)
 - 💡 **Feature Requests:** [GitHub Discussions](https://github.com/muhammadalifh/vscode-ai-commit/discussions)
 - ⭐ **Like it?** Star the repo and leave a review!
-- 📧 **Contact:** [Your Email]
 
 ---
 
