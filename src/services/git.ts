@@ -154,3 +154,17 @@ export function getDiffStats(diff: string): { additions: number; deletions: numb
   
   return { additions, deletions };
 }
+
+/**
+ * Stage all changes (git add -A)
+ */
+export async function stageAllChanges(): Promise<void> {
+  const cwd = getWorkspacePath();
+  
+  try {
+    await execAsync('git add -A', { cwd });
+  } catch (error) {
+    throw new Error(`Failed to stage changes: ${(error as Error).message}`);
+  }
+}
+

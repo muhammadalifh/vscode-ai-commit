@@ -25,7 +25,6 @@ export interface AIProvider {
 export enum ProviderType {
   GROQ = 'groq',
   OPENROUTER = 'openrouter',
-  GEMINI = 'gemini',
   MISTRAL = 'mistral',
   COHERE = 'cohere'
 }

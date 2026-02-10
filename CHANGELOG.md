@@ -2,6 +2,28 @@
 
 All notable changes to the "AI Commit Message Generator" extension will be documented in this file.
 
+## [1.3.0] - 2026-02-10
+
+### ✨ Added
+- **Smart Change Detection**: Interactive Quick Pick dialog when no staged changes found
+  - `Stage All & Generate` — auto-stage all changes then generate commit message
+  - `Use Unstaged Changes` — generate from unstaged changes without staging
+  - `Cancel` — abort the operation
+- **Multi-Repository Support**: Prompt user to select repository when multiple are open
+- **`git add -A` Integration**: New `stageAllChanges()` service for auto-staging
+
+### 🐛 Fixed
+- **Null Safety**: Added response validation for Groq, Mistral, and Cohere providers (matching OpenRouter's pattern)
+- **Silent Unstaged Fallback**: Replaced confusing silent fallback with explicit user choice dialog
+
+### 🗑️ Removed
+- **Gemini Provider**: Fully removed Google Gemini provider (was never registered in provider index)
+  - Removed `gemini.ts`, Gemini config entries, and `GEMINI` enum value
+
+**Full Changelog**: https://github.com/muhammadalifh/vscode-ai-commit/compare/v1.2.1...v1.3.0
+
+---
+
 ## [1.2.1] - 2026-02-05
 
 ### 🔄 Changed

@@ -9,13 +9,11 @@ export interface Config {
   groqModel: string;
   openrouterApiKey: string;
   openrouterModel: string;
-  geminiApiKey: string;
-  geminiModel: string;
   mistralApiKey: string;
   mistralModel: string;
   cohereApiKey: string;
   cohereModel: string;
-  preferredProvider: 'auto' | 'random' | 'groq' | 'openrouter' | 'gemini' | 'mistral' | 'cohere';
+  preferredProvider: 'auto' | 'random' | 'groq' | 'openrouter' | 'mistral' | 'cohere';
   commitStyle: 'conventional' | 'detailed' | 'simple';
   language: 'english' | 'indonesian';
 }
@@ -31,8 +29,6 @@ export function getConfig(): Config {
     groqModel: config.get<string>('groqModel') || 'llama-3.3-70b-versatile',
     openrouterApiKey: (config.get<string>('openrouterApiKey') || process.env.OPENROUTER_API_KEY || '').trim(),
     openrouterModel: config.get<string>('openrouterModel') || 'arcee-ai/trinity-large-preview:free',
-    geminiApiKey: (config.get<string>('geminiApiKey') || process.env.GEMINI_API_KEY || '').trim(),
-    geminiModel: config.get<string>('geminiModel') || 'gemini-1.5-flash',
     mistralApiKey: (config.get<string>('mistralApiKey') || process.env.MISTRAL_API_KEY || '').trim(),
     mistralModel: config.get<string>('mistralModel') || 'codestral-latest',
     cohereApiKey: (config.get<string>('cohereApiKey') || process.env.COHERE_API_KEY || '').trim(),
@@ -51,7 +47,6 @@ export function hasAnyProvider(): boolean {
   return !!(
     config.groqApiKey ||
     config.openrouterApiKey ||
-    config.geminiApiKey ||
     config.mistralApiKey ||
     config.cohereApiKey
   );

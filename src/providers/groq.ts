@@ -46,6 +46,12 @@ export class GroqProvider implements AIProvider {
       }
     );
     
-    return response.data.choices[0].message.content;
+    const content = response.data.choices?.[0]?.message?.content;
+    
+    if (!content) {
+      throw new Error('Groq returned empty content. Try a different model or check your API key.');
+    }
+    
+    return content;
   }
 }

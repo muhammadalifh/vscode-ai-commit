@@ -4,7 +4,7 @@
 
 ![VSCode Extension](https://img.shields.io/badge/vscode-extension-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
-![Version](https://img.shields.io/badge/version-1.2.0-brightgreen)
+![Version](https://img.shields.io/badge/version-1.3.0-brightgreen)
 ![Downloads](https://img.shields.io/visual-studio-marketplace/d/muhammadalifh.vscode-ai-commit-gen)
 ![Rating](https://img.shields.io/visual-studio-marketplace/r/muhammadalifh.vscode-ai-commit-gen)
 
@@ -40,6 +40,8 @@ This extension uses **AI** to read your actual code changes (`git diff`) and gen
 | ⚡ **One-Click Operation** | Press a button or use a shortcut—done in 2 seconds |
 | 📋 **Flexible Output** | Copy to clipboard, auto-fill SCM input, or edit before using |
 | 🚀 **Performance Optimized** | Fast models with 78-91 tok/s throughput |
+| 🔀 **Smart Change Detection** | Auto-detects staged/unstaged changes with interactive options (Stage All, Use Unstaged, Cancel) |
+| 📦 **Multi-Repo Support** | Works with multiple git repositories open at once |
 
 ---
 
@@ -67,11 +69,15 @@ You need at least one API key (all are **FREE**):
 
 ### 4️⃣ Generate!
 1. Make some code changes
-2. Stage your files (`git add .`)
-3. Click the **✨ sparkle icon** in Source Control panel
+2. Click the **✨ sparkle icon** in Source Control panel
    - Or press `Ctrl+Shift+G` then `Ctrl+Shift+M`
    - Or open Command Palette (`Ctrl+Shift+P`) → **"AI: Generate Commit Message"**
-4. Done! Your commit message is ready 🎉
+3. **If files are staged** → commit message is generated instantly
+4. **If no staged files** → you'll be prompted:
+   - **Stage All & Generate** — stages everything and generates
+   - **Use Unstaged Changes** — generates without staging
+   - **Cancel** — do nothing
+5. Done! Your commit message is ready 🎉
 
 ---
 
@@ -93,7 +99,7 @@ Each provider has dedicated settings for:
 - 🤖 Model Selection
 - 🌐 API Base URL (optional)
 
-#### Available Models (as of v1.2.0)
+#### Available Models (as of v1.3.0)
 
 **Groq:**
 - `llama-3.3-70b-versatile` ⚡ (Recommended - Balanced)

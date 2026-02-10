@@ -4,9 +4,19 @@
  */
 import * as vscode from 'vscode';
 import { callWithFallback } from './providers';
-import { getStagedDiff, getStagedFiles, getUnstagedDiff, getUnstagedFiles, detectTechStack, getDiffStats } from './services/git';
+import { getStagedDiff, getStagedFiles, getUnstagedDiff, getUnstagedFiles, stageAllChanges, detectTechStack, getDiffStats } from './services/git';
 import { buildSystemPrompt, buildUserPrompt } from './services/prompt';
 import { hasAnyProvider } from './config';
+
+/** QuickPick item with custom action property */
+interface ActionQuickPickItem extends vscode.QuickPickItem {
+  action: string;
+}
+
+/** QuickPick item with repository index */
+interface RepoQuickPickItem extends vscode.QuickPickItem {
+  index: number;
+}
 
 /**
  * Extension activation
@@ -50,29 +60,81 @@ async function generateCommitMessage() {
     async (progress, token) => {
       try {
         // Step 1: Get staged changes
-        progress.report({ message: 'Reading changes...' });
+        progress.report({ message: 'Reading staged changes...' });
         
         let [diff, files] = await Promise.all([
           getStagedDiff(),
           getStagedFiles()
         ]);
         
-        let usingUnstaged = false;
+        let changeSource: 'staged' | 'unstaged' | 'auto-staged' = 'staged';
         
+        // If no staged changes, check for unstaged and prompt user
         if (!diff || files.length === 0) {
-          // Try unstaged changes
-          [diff, files] = await Promise.all([
+          const [unstagedDiff, unstagedFiles] = await Promise.all([
             getUnstagedDiff(),
             getUnstagedFiles()
           ]);
           
-          if (diff && files.length > 0) {
-            usingUnstaged = true;
-          } else {
+          if (!unstagedDiff || unstagedFiles.length === 0) {
             vscode.window.showWarningMessage(
               'No changes found (staged or unstaged) to generate a commit message.'
             );
             return;
+          }
+          
+          // Show Quick Pick dialog for user to choose
+          const choice = await vscode.window.showQuickPick<ActionQuickPickItem>(
+            [
+              {
+                label: '$(add) Stage All & Generate',
+                description: `Stage all ${unstagedFiles.length} changed file(s) and generate commit message`,
+                action: 'stage-all'
+              },
+              {
+                label: '$(edit) Use Unstaged Changes',
+                description: 'Generate commit message from unstaged changes (without staging)',
+                action: 'use-unstaged'
+              },
+              {
+                label: '$(close) Cancel',
+                description: 'Do nothing',
+                action: 'cancel'
+              }
+            ],
+            {
+              placeHolder: `No staged changes found. ${unstagedFiles.length} unstaged file(s) detected. What would you like to do?`,
+              title: 'AI Commit Generator — No Staged Changes'
+            }
+          );
+          
+          if (!choice || choice.action === 'cancel') {
+            return;
+          }
+          
+          if (choice.action === 'stage-all') {
+            // Auto-stage all changes
+            progress.report({ message: 'Staging all changes...' });
+            await stageAllChanges();
+            
+            // Re-read staged changes after staging
+            [diff, files] = await Promise.all([
+              getStagedDiff(),
+              getStagedFiles()
+            ]);
+            changeSource = 'auto-staged';
+            
+            if (!diff || files.length === 0) {
+              vscode.window.showWarningMessage(
+                'No changes found after staging. Nothing to generate.'
+              );
+              return;
+            }
+          } else {
+            // Use unstaged changes
+            diff = unstagedDiff;
+            files = unstagedFiles;
+            changeSource = 'unstaged';
           }
         }
         
@@ -121,15 +183,47 @@ async function generateCommitMessage() {
         // Step 6: Direct Fill or Copy
         const gitExtension = vscode.extensions.getExtension('vscode.git');
         
+        // Build source label
+        let sourceLabel = '';
+        if (changeSource === 'unstaged') {
+          sourceLabel = ' (from unstaged)';
+        } else if (changeSource === 'auto-staged') {
+          sourceLabel = ' (auto-staged)';
+        }
+        
         if (gitExtension) {
           const git = gitExtension.exports.getAPI(1);
-          if (git.repositories.length > 0) {
-            // Select the first repository (or finding the one matching current workspace would be better)
+          if (git.repositories.length > 1) {
+            // Multiple repositories — let user pick
+            const repoItems: RepoQuickPickItem[] = git.repositories.map((repo: any, index: number) => ({
+              label: repo.rootUri.fsPath.split(/[\\/]/).pop() || `Repository ${index + 1}`,
+              description: repo.rootUri.fsPath,
+              index
+            }));
+            
+            const selected = await vscode.window.showQuickPick<RepoQuickPickItem>(repoItems, {
+              placeHolder: 'Select which repository to use',
+              title: 'Multiple Repositories Detected'
+            });
+            
+            if (!selected) {
+              await vscode.env.clipboard.writeText(commitMessage);
+              vscode.window.showInformationMessage('Cancelled. Commit message copied to clipboard.');
+              return;
+            }
+            
+            const selectedRepo = git.repositories[selected.index];
+            
+            selectedRepo.inputBox.value = commitMessage;
+            vscode.window.showInformationMessage(
+              `Commit message generated by ${provider.name}${sourceLabel}`
+            );
+          } else if (git.repositories.length === 1) {
             const repo = git.repositories[0];
             repo.inputBox.value = commitMessage;
             
             vscode.window.showInformationMessage(
-              `Commit message generated by ${provider.name}${usingUnstaged ? ' (from UNSTAGED)' : ''}`
+              `Commit message generated by ${provider.name}${sourceLabel}`
             );
           } else {
              await vscode.env.clipboard.writeText(commitMessage);

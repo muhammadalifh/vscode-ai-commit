@@ -46,6 +46,12 @@ export class MistralProvider implements AIProvider {
       }
     );
     
-    return response.data.choices[0].message.content;
+    const content = response.data.choices?.[0]?.message?.content;
+    
+    if (!content) {
+      throw new Error('Mistral returned empty content. Try a different model or check your API key.');
+    }
+    
+    return content;
   }
 }

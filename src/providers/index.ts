@@ -5,7 +5,6 @@
 import { AIProvider, ProviderType } from './base';
 import { GroqProvider } from './groq';
 import { OpenRouterProvider } from './openrouter';
-import { GeminiProvider } from './gemini';
 import { MistralProvider } from './mistral';
 import { CohereProvider } from './cohere';
 import { getConfig } from '../config';
@@ -14,7 +13,6 @@ import { getConfig } from '../config';
 const providers = new Map<ProviderType, AIProvider>();
 providers.set(ProviderType.GROQ, new GroqProvider());
 providers.set(ProviderType.OPENROUTER, new OpenRouterProvider());
-
 providers.set(ProviderType.MISTRAL, new MistralProvider());
 providers.set(ProviderType.COHERE, new CohereProvider());
 

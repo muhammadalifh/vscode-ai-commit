@@ -45,6 +45,12 @@ export class CohereProvider implements AIProvider {
       }
     );
     
-    return response.data.message.content[0].text;
+    const content = response.data.message?.content?.[0]?.text;
+    
+    if (!content) {
+      throw new Error('Cohere returned empty content. Try a different model or check your API key.');
+    }
+    
+    return content;
   }
 }
