@@ -4,7 +4,7 @@ Generate detailed, clear commit messages using AI with multi-provider fallback.
 
 ![VSCode Extension](https://img.shields.io/badge/vscode-extension-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
-![Version](https://img.shields.io/badge/version-1.4.0-brightgreen)
+![Version](https://img.shields.io/badge/version-1.4.1-brightgreen)
 
 ## ✨ Features
 
