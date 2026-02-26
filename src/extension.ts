@@ -27,37 +27,25 @@ interface RepoQuickPickItem extends vscode.QuickPickItem {
 export async function activate(context: vscode.ExtensionContext) {
   console.log('AI Commit Generator is now active!');
   
-  // Initialize services
+  // Initialize history service (sync)
   initHistory(context);
-  await initSecrets(context);
   
-  // Migrate existing keys from settings to SecretStorage (one-time)
-  const migrated = await migrateKeysFromSettings();
-  if (migrated > 0) {
-    vscode.window.showInformationMessage(
-      `🔒 ${migrated} API key(s) migrated to secure storage. Keys are no longer visible in settings.`
-    );
-  }
-  
-  // Register the main command
+  // Register ALL commands FIRST (before any async operations)
   const generateCommand = vscode.commands.registerCommand(
     'aiCommit.generate',
     generateCommitMessage
   );
   
-  // Register API Key Manager command
   const manageKeysCommand = vscode.commands.registerCommand(
     'aiCommit.manageKeys',
     showKeyManager
   );
   
-  // Register Provider Status Check command
   const checkProvidersCommand = vscode.commands.registerCommand(
     'aiCommit.checkProviders',
     checkProviderStatus
   );
   
-  // Register Commit History command
   const historyCommand = vscode.commands.registerCommand(
     'aiCommit.history',
     showHistoryPicker
@@ -80,6 +68,21 @@ export async function activate(context: vscode.ExtensionContext) {
   keyManagerStatusBar.tooltip = 'AI Commit: Manage API Keys (Show/Hide, Copy, Edit)';
   keyManagerStatusBar.show();
   context.subscriptions.push(keyManagerStatusBar);
+  
+  // Async initialization (non-blocking — commands already registered above)
+  try {
+    await initSecrets(context);
+    
+    // Migrate existing keys from settings to SecretStorage (one-time)
+    const migrated = await migrateKeysFromSettings();
+    if (migrated > 0) {
+      vscode.window.showInformationMessage(
+        `🔒 ${migrated} API key(s) migrated to secure storage. Keys are no longer visible in settings.`
+      );
+    }
+  } catch (err) {
+    console.error('AI Commit: Failed to initialize SecretStorage:', err);
+  }
   
   // First-run welcome notification
   const hasShownWelcome = context.globalState.get<boolean>('aiCommit.welcomeShown', false);
