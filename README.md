@@ -4,7 +4,7 @@
 
 ![VSCode Extension](https://img.shields.io/badge/vscode-extension-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
-![Version](https://img.shields.io/badge/version-1.3.0-brightgreen)
+![Version](https://img.shields.io/badge/version-1.4.0-brightgreen)
 ![Downloads](https://img.shields.io/visual-studio-marketplace/d/muhammadalifh.vscode-ai-commit-gen)
 ![Rating](https://img.shields.io/visual-studio-marketplace/r/muhammadalifh.vscode-ai-commit-gen)
 
@@ -42,6 +42,10 @@ This extension uses **AI** to read your actual code changes (`git diff`) and gen
 | 🚀 **Performance Optimized** | Fast models with 78-91 tok/s throughput |
 | 🔀 **Smart Change Detection** | Auto-detects staged/unstaged changes with interactive options (Stage All, Use Unstaged, Cancel) |
 | 📦 **Multi-Repo Support** | Works with multiple git repositories open at once |
+| 🔑 **API Key Manager** | Show/hide toggle, copy, edit, and remove API keys with a dedicated command |
+| 🩺 **Provider Status Check** | Test all configured API keys with one command — see latency and status |
+| 📜 **Commit History** | Browse and reuse last 10 generated commit messages |
+| 📤 **Output Mode** | Choose where messages go: SCM input, clipboard, or editor |
 
 ---
 
@@ -79,6 +83,13 @@ You need at least one API key (all are **FREE**):
    - **Cancel** — do nothing
 5. Done! Your commit message is ready 🎉
 
+### 5️⃣ More Commands
+| Command | Shortcut | Description |
+|---------|----------|-------------|
+| `AI: Manage API Keys` | `Ctrl+Shift+G` → `Ctrl+Shift+K` | Show/hide, copy, edit, remove API keys |
+| `AI: Check Provider Status` | Command Palette | Test if your API keys are valid |
+| `AI: Commit History` | `Ctrl+Shift+G` → `Ctrl+Shift+H` | Browse & reuse recent commit messages |
+
 ---
 
 ## ⚙️ Configuration
@@ -90,7 +101,7 @@ You need at least one API key (all are **FREE**):
 | **Preferred Provider** | `auto`, `groq`, `openrouter`, `mistral`, `cohere` | `auto` | Choose AI provider (auto = smart fallback) |
 | **Commit Style** | `conventional`, `detailed`, `simple` | `conventional` | Message format style |
 | **Language** | `english`, `indonesian` | `english` | Output language |
-| **Output Mode** | `clipboard`, `scm`, `editor` | `clipboard` | Where to put the message |
+| **Output Mode** | `scm`, `clipboard`, `editor` | `scm` | Where to put the generated message |
 
 ### Provider-Specific Settings
 
@@ -154,7 +165,8 @@ Add OAuth2 login with Google provider
 
 ## 🔒 Privacy & Security
 
-- ✅ **Your API keys are stored locally** on your machine (in VSCode settings)
+- ✅ **API keys are encrypted** using VS Code's SecretStorage (never stored as plain text)
+- ✅ **Key Manager** with show/hide toggle — keys are masked by default
 - ✅ **Code diffs are sent directly** to the AI provider you choose
 - ✅ **The extension developer has NO access** to your keys or code
 - ✅ **Open source** — inspect the code yourself on [GitHub](https://github.com/muhammadalifh/vscode-ai-commit)
@@ -165,7 +177,7 @@ Add OAuth2 login with Google provider
 ## 🐛 Troubleshooting
 
 ### ❌ "No API key configured"
-**Solution:** Add at least one API key in VSCode Settings → search "AI Commit"
+**Solution:** Click `🔑 AI Keys` in the status bar, or run `AI: Manage API Keys` from Command Palette
 
 ### ❌ "Failed to generate commit message"
 **Solutions:**
@@ -209,9 +221,15 @@ npm run compile
 vscode-ai-commit/
 ├── src/
 │   ├── extension.ts          # Main entry point
+│   ├── config.ts             # Configuration management
 │   ├── providers/             # AI provider implementations
 │   ├── services/              # Core services
-│   └── utils/                 # Helper functions
+│   │   ├── git.ts            # Git operations
+│   │   ├── prompt.ts         # AI prompt building
+│   │   ├── keyManager.ts     # API key management UI
+│   │   ├── statusCheck.ts    # Provider status testing
+│   │   └── history.ts        # Commit message history
+│   └── test/                 # Test suite
 ├── package.json              # Extension manifest
 └── tsconfig.json             # TypeScript config
 ```

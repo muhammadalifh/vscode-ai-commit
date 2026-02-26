@@ -2,6 +2,45 @@
 
 All notable changes to the "AI Commit Message Generator" extension will be documented in this file.
 
+## [1.4.0] - 2026-02-26
+
+### ✨ Added
+- **API Key Manager** (`AI: Manage API Keys`) — New command with show/hide toggle, copy, edit, and remove for all provider API keys
+  - Shortcut: `Ctrl+Shift+G` → `Ctrl+Shift+K`
+  - Masked key display (e.g., `gsk-••••...a3f2`) with reveal toggle
+  - Quick actions: Copy to clipboard, Edit inline, Remove with confirmation
+  - Direct links to get FREE API keys for unconfigured providers
+- **Provider Status Check** (`AI: Check Provider Status`) — Test all configured API keys with a single command
+  - Shows real-time latency for each provider
+  - Friendly error messages (Invalid key, Rate limited, Timeout)
+  - Summary of working vs failing providers
+- **Commit Message History** (`AI: Commit History`) — Browse and reuse last 10 generated commit messages
+  - Shortcut: `Ctrl+Shift+G` → `Ctrl+Shift+H`
+  - Reuse options: Fill SCM input, Copy to clipboard, Open in editor
+  - Shows provider name and relative timestamp for each entry
+  - Clear history option with confirmation
+- **Output Mode Setting** (`aiCommit.outputMode`) — Choose where generated commit messages go
+  - `scm` — Fill Source Control input box (default, existing behavior)
+  - `clipboard` — Copy to clipboard only
+  - `editor` — Open in a new editor tab for review/editing
+- **Status Bar Button** — `🔑 AI Keys` button in status bar for one-click access to Key Manager
+- **SCM Panel Icons** — Key Manager (🔑) and History (📜) icons in Source Control panel header
+- **Welcome Notification** — First-run onboarding with "Setup API Keys" button for new users
+
+### 🔒 Security
+- **SecretStorage Migration** — API keys moved from plain text settings to VS Code's encrypted SecretStorage
+  - Existing keys are auto-migrated on first run
+  - API key input fields removed from Settings UI
+  - Keys can only be managed through the Key Manager command
+
+### 🔄 Changed
+- **Error Dialog**: "No API key" error now shows "Manage Keys" button alongside "Open Settings"
+- **Commit Generation**: Messages are automatically saved to history after generation
+
+**Full Changelog**: https://github.com/muhammadalifh/vscode-ai-commit/compare/v1.3.0...v1.4.0
+
+---
+
 ## [1.3.0] - 2026-02-10
 
 ### ✨ Added

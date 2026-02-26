@@ -2,7 +2,7 @@
   "name": "vscode-ai-commit-gen",
   "displayName": "AI Commit Generator (Multi-Provider)",
   "description": "Generate detailed, clear commit messages using AI with multi-provider fallback",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "icon": "icon.png",
   "publisher": "muhammadalifh",
   "engines": {
@@ -32,7 +32,22 @@
       "scm/title": [
         {
           "command": "aiCommit.generate",
-          "group": "navigation",
+          "group": "navigation@1",
+          "when": "scmProvider == git"
+        },
+        {
+          "command": "aiCommit.manageKeys",
+          "group": "navigation@2",
+          "when": "scmProvider == git"
+        },
+        {
+          "command": "aiCommit.history",
+          "group": "navigation@3",
+          "when": "scmProvider == git"
+        },
+        {
+          "command": "aiCommit.checkProviders",
+          "group": "1_aicommit@1",
           "when": "scmProvider == git"
         }
       ]
@@ -42,6 +57,21 @@
         "command": "aiCommit.generate",
         "title": "AI: Generate Commit Message",
         "icon": "$(sparkle)"
+      },
+      {
+        "command": "aiCommit.manageKeys",
+        "title": "AI: Manage API Keys",
+        "icon": "$(key)"
+      },
+      {
+        "command": "aiCommit.checkProviders",
+        "title": "AI: Check Provider Status",
+        "icon": "$(pulse)"
+      },
+      {
+        "command": "aiCommit.history",
+        "title": "AI: Commit History",
+        "icon": "$(history)"
       }
     ],
     "keybindings": [
@@ -49,6 +79,16 @@
         "command": "aiCommit.generate",
         "key": "ctrl+shift+g ctrl+shift+m",
         "mac": "cmd+shift+g cmd+shift+m"
+      },
+      {
+        "command": "aiCommit.manageKeys",
+        "key": "ctrl+shift+g ctrl+shift+k",
+        "mac": "cmd+shift+g cmd+shift+k"
+      },
+      {
+        "command": "aiCommit.history",
+        "key": "ctrl+shift+g ctrl+shift+h",
+        "mac": "cmd+shift+g cmd+shift+h"
       }
     ],
     "configuration": [
@@ -102,18 +142,28 @@
             "default": "english",
             "markdownDescription": "**Language**\n\nLanguage for generated commit messages.",
             "order": 3
+          },
+          "aiCommit.outputMode": {
+            "type": "string",
+            "enum": [
+              "scm",
+              "clipboard",
+              "editor"
+            ],
+            "enumDescriptions": [
+              "Fill the Source Control input box (default)",
+              "Copy commit message to clipboard",
+              "Open commit message in a new editor tab for review/editing"
+            ],
+            "default": "scm",
+            "markdownDescription": "**Output Mode**\n\nWhere to put the generated commit message.",
+            "order": 4
           }
         }
       },
       {
         "title": "AI Commit Generator: Providers",
         "properties": {
-          "aiCommit.groqApiKey": {
-            "type": "string",
-            "default": "",
-            "markdownDescription": "**Groq API Key** _(Primary Provider - Fastest)_\n\n🔑 Get your FREE key at [console.groq.com](https://console.groq.com)\n\n🔒 **Privacy:** Your API key is stored locally and sent directly to Groq's servers. The extension developer has NO access to your keys or data.",
-            "order": 10
-          },
           "aiCommit.groqModel": {
             "type": "string",
             "enum": [
@@ -131,14 +181,8 @@
               "Mixtral 8x7B - Good for code"
             ],
             "default": "llama-3.3-70b-versatile",
-            "markdownDescription": "**Groq Model**\n\n✅ All Groq models are **FREE** with generous rate limits.",
+            "markdownDescription": "**Groq Model**\n\n✅ All Groq models are **FREE** with generous rate limits.\n\n🔑 [Manage API Keys → Key Manager](command:aiCommit.manageKeys)",
             "order": 11
-          },
-          "aiCommit.openrouterApiKey": {
-            "type": "string",
-            "default": "",
-            "markdownDescription": "**OpenRouter API Key** _(Fallback 1)_\n\n🔑 Get your FREE key at [openrouter.ai](https://openrouter.ai)\n\n🔒 **Privacy:** Your API key is stored locally and sent directly to OpenRouter's servers. The extension developer has NO access to your keys or data.",
-            "order": 20
           },
           "aiCommit.openrouterModel": {
             "type": "string",
@@ -151,14 +195,8 @@
               "Arcee Trinity Mini - Fast Free (2.8s latency)"
             ],
             "default": "arcee-ai/trinity-large-preview:free",
-            "markdownDescription": "**OpenRouter Model**\n\n✅ Only showing verified **FREE** models.",
+            "markdownDescription": "**OpenRouter Model**\n\n✅ Only showing verified **FREE** models.\n\n🔑 [Manage API Keys → Key Manager](command:aiCommit.manageKeys)",
             "order": 21
-          },
-          "aiCommit.mistralApiKey": {
-            "type": "string",
-            "default": "",
-            "markdownDescription": "**Mistral AI API Key** _(Fallback 2)_\n\n🔑 Get your FREE key at [console.mistral.ai](https://console.mistral.ai)\n\n🔒 **Privacy:** Your API key is stored locally and sent directly to Mistral's servers. The extension developer has NO access to your keys or data.",
-            "order": 30
           },
           "aiCommit.mistralModel": {
             "type": "string",
@@ -177,14 +215,8 @@
               "Mistral Large - Highest quality (PAID)"
             ],
             "default": "codestral-latest",
-            "markdownDescription": "**Mistral Model**\n\n✅ `codestral-latest` is **FREE** for code tasks.",
+            "markdownDescription": "**Mistral Model**\n\n✅ `codestral-latest` is **FREE** for code tasks.\n\n🔑 [Manage API Keys → Key Manager](command:aiCommit.manageKeys)",
             "order": 31
-          },
-          "aiCommit.cohereApiKey": {
-            "type": "string",
-            "default": "",
-            "markdownDescription": "**Cohere API Key** _(Fallback 3)_\n\n🔑 Get your FREE key at [dashboard.cohere.com](https://dashboard.cohere.com)\n\n🔒 **Privacy:** Your API key is stored locally and sent directly to Cohere's servers. The extension developer has NO access to your keys or data.",
-            "order": 40
           },
           "aiCommit.cohereModel": {
             "type": "string",
@@ -199,7 +231,7 @@
               "Command R 7B - Efficient (88.8 tok/s, fastest)"
             ],
             "default": "command-r-plus-08-2024",
-            "markdownDescription": "**Cohere Model**\n\n✅ FREE tier: **1000 API calls/month**.",
+            "markdownDescription": "**Cohere Model**\n\n✅ FREE tier: **1000 API calls/month**.\n\n🔑 [Manage API Keys → Key Manager](command:aiCommit.manageKeys)",
             "order": 41
           }
         }
