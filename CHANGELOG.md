@@ -2,6 +2,15 @@
 
 All notable changes to the "AI Commit Message Generator" extension will be documented in this file.
 
+## [1.4.1] - 2026-02-26
+
+### 🐛 Fixed
+- **Activation Error**: Fixed "command not found" error by registering commands synchronously before async SecretStorage initialization
+
+**Full Changelog**: https://github.com/muhammadalifh/vscode-ai-commit/compare/v1.4.0...v1.4.1
+
+---
+
 ## [1.4.0] - 2026-02-26
 
 ### ✨ Added
